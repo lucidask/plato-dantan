@@ -1,0 +1,1 @@
+console.log("Plato Dantan Linux ready");
