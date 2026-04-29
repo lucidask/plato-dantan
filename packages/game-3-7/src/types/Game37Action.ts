@@ -7,6 +7,10 @@ export type RevealInitialCardAction = {
   playerId: string;
 };
 
+export type StartRoundAction = {
+  type: "start_round";
+};
+
 export type PlayCardAction = {
   type: "play_card";
   playerId: string;
@@ -15,13 +19,29 @@ export type PlayCardAction = {
   };
 };
 
+export type ResolveTrickAction = {
+  type: "resolve_trick";
+};
+
 export type DrawCardAction = {
   type: "draw_card";
   playerId: string;
 };
 
+export type ScoreRoundAction = {
+  type: "score_round";
+};
+
+export type NextRoundAction = {
+  type: "next_round";
+};
+
 export type Game37Action =
   | StartMatchAction
   | RevealInitialCardAction
+  | StartRoundAction
   | PlayCardAction
-  | DrawCardAction;
+  | ResolveTrickAction
+  | DrawCardAction
+  | ScoreRoundAction
+  | NextRoundAction;

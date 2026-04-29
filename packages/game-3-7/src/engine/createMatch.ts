@@ -2,6 +2,7 @@ import type { Game37MatchConfig } from "../types/Game37Config";
 import type { Game37State } from "../types/Game37State";
 import type { Game37Team } from "../types/Game37Team";
 import { createGame37Deck } from "../deck/createGame37Deck";
+import { shuffleDeck } from "../../../card-core/src";
 
 function createTeams(config: Game37MatchConfig): Game37Team[] {
   if (config.playerCount === 2) {
@@ -32,7 +33,7 @@ function createTeams(config: Game37MatchConfig): Game37Team[] {
 
 export function createGame37Match(config: Game37MatchConfig): Game37State {
   const teams = createTeams(config);
-  const deck32 = createGame37Deck();
+  const deck32 = shuffleDeck(createGame37Deck());
 
   const scoreByTeam: Record<string, number> = {};
   const sequenceWinsByTeam: Record<string, number> = {};

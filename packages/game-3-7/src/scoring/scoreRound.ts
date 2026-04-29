@@ -55,5 +55,16 @@ export function scoreRound(state: Game37State): Game37State {
     },
   });
 
+  const lastTrickWon = state.eventQueue
+  .filter((event) => event.type === "trick_won")
+  .slice(-1)[0];
+
+if (lastTrickWon?.type === "trick_won") {
+  state.currentRoundStarterId = lastTrickWon.payload.winnerPlayerId;
+}
+
+state.phase = "round_transition";
+state.currentPlayerId = null;
+
   return state;
 }

@@ -1,5 +1,4 @@
 import type { Game37State } from "../types/Game37State";
-import type { Game37Event } from "../types/Game37Event";
 import type { Card } from "../../../card-core/src";
 import { drawTopCard } from "../../../card-core/src";
 import { GAME37_RANK_ORDER } from "../constants/game37Ranks";
@@ -81,13 +80,9 @@ export function handleRevealInitialCard(
     ),
   ];
 
-  // reset reveal
-  for (const pid of Object.keys(state.initialReveal)) {
-    state.initialReveal[pid] = null;
-  }
+// les deux cartes restent visibles.
+// Le frontend lancera ensuite start_round.
+state.phase = "round_setup";
 
-  // passer à la suite
-  state.phase = "round_setup";
-
-  return state;
+return state;
 }

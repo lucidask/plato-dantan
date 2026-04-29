@@ -3,6 +3,10 @@ import type { Game37State } from "../types/Game37State";
 import { handleRevealInitialCard } from "./initialReveal";
 import { playCard } from "./playCard";
 import { drawCard } from "./drawCard";
+import { resolveTrick } from "./resolveTrick";
+import { setupRound } from "./setupRound";
+import { scoreRound } from "../scoring/scoreRound";
+import { nextRound } from "./nextRound";
 
 export function dispatchGame37Action(
   state: Game37State,
@@ -20,6 +24,18 @@ export function dispatchGame37Action(
 
     case "start_match":
       return state;
+
+    case "resolve_trick":
+      return resolveTrick(state);
+
+    case "start_round":
+      return setupRound(state);
+
+    case "score_round":
+      return scoreRound(state);
+
+    case "next_round":
+      return nextRound(state);
 
     default:
       return state;

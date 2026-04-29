@@ -1,0 +1,6 @@
+find apps/web/src packages/game-3-7/src packages/card-core/src \
+  -type f \
+  \( -name "*.ts" -o -name "*.tsx" -o -name "*.json" \) \
+  | sort
+
+freeze : lors du tirage au debut, si les 2 joueurs tirent 2 cartes de meme valeurs (il faut refaire le tirage aussi)

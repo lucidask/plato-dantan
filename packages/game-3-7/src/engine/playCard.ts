@@ -50,12 +50,13 @@ export function playCard(
     },
   });
 
-  if (state.currentTrick.length === state.players.length) {
-    state.phase = "trick_resolution";
-    state.currentPlayerId = null;
-  } else {
-    state.currentPlayerId = getNextPlayerId(state);
-  }
+if (state.currentTrick.length === state.players.length) {
+  state.phase = "trick_resolution";
+  state.currentPlayerId = null;
+  return state;
+}
+
+state.currentPlayerId = getNextPlayerId(state);
 
   return state;
 }
