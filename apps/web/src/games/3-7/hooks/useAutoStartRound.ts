@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { Game37Action, Game37State } from "game-3-7";
 
 type UseAutoStartRoundParams = {
@@ -14,9 +14,13 @@ export function useAutoStartRound({
   enabled = false,
   delayMs = 1200,
 }: UseAutoStartRoundParams) {
+  const lastStartedRoundRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!enabled) return;
     if (state.phase !== "round_setup") return;
+
+    if (lastStartedRoundRef.current === state.roundNumber) return;
 
     const allPlayersRevealed = Object.values(state.initialReveal).every(
       (card) => card !== null
@@ -25,9 +29,17 @@ export function useAutoStartRound({
     if (!allPlayersRevealed) return;
 
     const timer = window.setTimeout(() => {
+      lastStartedRoundRef.current = state.roundNumber;
       dispatch({ type: "start_round" });
     }, delayMs);
 
     return () => window.clearTimeout(timer);
-  }, [state.phase, state.initialReveal, dispatch, enabled, delayMs]);
+  }, [
+    state.phase,
+    state.roundNumber,
+    state.initialReveal,
+    dispatch,
+    enabled,
+    delayMs,
+  ]);
 }

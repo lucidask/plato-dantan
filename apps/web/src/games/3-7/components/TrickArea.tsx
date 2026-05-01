@@ -1,10 +1,11 @@
+import { memo } from "react";
 import type { PlayedCard } from "game-3-7";
 
 type TrickAreaProps = {
   cards: PlayedCard[];
 };
 
-export default function TrickArea({ cards }: TrickAreaProps) {
+function TrickArea({ cards }: TrickAreaProps) {
   return (
     <div>
       <h2>Pli courant</h2>
@@ -24,3 +25,5 @@ export default function TrickArea({ cards }: TrickAreaProps) {
     </div>
   );
 }
+
+export default memo(TrickArea);

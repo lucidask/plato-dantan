@@ -20,10 +20,17 @@ export default function RoundPointsPreview({
   wonCardsByOwner,
 }: RoundPointsPreviewProps) {
   return (
-    <div style={{ marginTop: 20 }}>
-      <h2>Points provisoires de la manche</h2>
+    <section style={{ marginTop: 20, minWidth: 0 }}>
+      <h2>Points provisoires</h2>
 
-      <div style={{ display: "flex", gap: 16 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: 12,
+          minWidth: 0,
+        }}
+      >
         {Object.entries(wonCardsByOwner).map(([ownerId, cards]) => {
           const aces = countAces(cards);
           const trios = countTrios(cards);
@@ -36,19 +43,20 @@ export default function RoundPointsPreview({
                 border: "1px solid #ccc",
                 padding: 12,
                 borderRadius: 8,
-                minWidth: 160,
+                minWidth: 0,
+                boxSizing: "border-box",
               }}
             >
               <strong>{ownerId}</strong>
               <div>As : {aces}</div>
               <div>Trios : {trios}</div>
               <div>
-                <strong>Total provisoire : {total}</strong>
+                <strong>Total : {total}</strong>
               </div>
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

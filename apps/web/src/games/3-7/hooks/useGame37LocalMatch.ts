@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   createGame37Match,
   dispatchGame37Action,
@@ -37,13 +37,20 @@ export function useGame37LocalMatch() {
   const [state, setState] = useState<Game37State>(() => createInitialState());
   const [events, setEvents] = useState<Game37Event[]>([]);
 
-  function dispatch(action: Game37Action) {
-  const stateCopy = structuredClone(state);
-  const newState = dispatchGame37Action(stateCopy, action);
+  const dispatch = useCallback((action: Game37Action) => {
+    setState((previousState) => {
+      const stateCopy = structuredClone(previousState);
+      const newState = dispatchGame37Action(stateCopy, action);
 
-  setState(newState);
-  setEvents(newState.eventQueue.slice(-5));
-}
+      const recentEvents = newState.eventQueue.slice(-10);
+      setEvents(recentEvents);
+
+      return {
+        ...newState,
+        eventQueue: recentEvents,
+      };
+    });
+  }, []);
 
   return {
     state,

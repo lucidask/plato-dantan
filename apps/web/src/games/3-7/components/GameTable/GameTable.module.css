@@ -1,0 +1,64 @@
+.gameTable {
+  display: grid;
+  grid-template-columns: minmax(0, 900px) 280px;
+  gap: 24px;
+  width: 100%;
+  max-width: 1220px;
+  margin: 32px auto;
+  align-items: start;
+  box-sizing: border-box;
+}
+
+.playArea {
+  min-height: 620px;
+  display: grid;
+  grid-template-rows: 150px 1fr 150px;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid #d8d8d8;
+  border-radius: 24px;
+  background: #f8f8f8;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.topZone,
+.centerZone,
+.bottomZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.centerZone {
+  border-radius: 20px;
+  background: white;
+  border: 1px dashed #d0d0d0;
+  min-width: 0;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid #d8d8d8;
+  border-radius: 24px;
+  background: #f8f8f8;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .gameTable {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+}

@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import type { Card } from "card-core";
 
 type PlayerHandProps = {
@@ -7,12 +8,20 @@ type PlayerHandProps = {
   onCardClick?: (card: Card) => void;
 };
 
-export default function PlayerHand({
+function PlayerHand({
   title,
   cards,
   disabled = false,
   onCardClick,
 }: PlayerHandProps) {
+  const handleCardClick = useCallback(
+    (card: Card) => {
+      if (disabled) return;
+      onCardClick?.(card);
+    },
+    [disabled, onCardClick]
+  );
+
   return (
     <div>
       <h3>{title}</h3>
@@ -22,7 +31,7 @@ export default function PlayerHand({
           <button
             key={card.id}
             disabled={disabled}
-            onClick={() => onCardClick?.(card)}
+            onClick={() => handleCardClick(card)}
             style={{ padding: 10, cursor: disabled ? "not-allowed" : "pointer" }}
           >
             {card.shortLabel}
@@ -32,3 +41,5 @@ export default function PlayerHand({
     </div>
   );
 }
+
+export default memo(PlayerHand);

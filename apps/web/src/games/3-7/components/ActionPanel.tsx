@@ -6,12 +6,16 @@ type ActionPanelProps = {
 };
 
 export default function ActionPanel({ state, dispatch }: ActionPanelProps) {
+  const expectedDrawPlayerId =
+    state.drawContext?.expectedOrder[state.drawContext.currentIndex] ??
+    state.currentPlayerId;
+
   return (
     <div style={{ marginTop: 20 }}>
-      {/* Révélation initiale */}
       {state.phase === "initial_card_reveal" && (
         <>
           <button
+            disabled={state.initialReveal["player-1"] !== null}
             onClick={() =>
               dispatch({
                 type: "reveal_initial_card",
@@ -23,6 +27,7 @@ export default function ActionPanel({ state, dispatch }: ActionPanelProps) {
           </button>
 
           <button
+            disabled={state.initialReveal["player-2"] !== null}
             onClick={() =>
               dispatch({
                 type: "reveal_initial_card",
@@ -36,28 +41,25 @@ export default function ActionPanel({ state, dispatch }: ActionPanelProps) {
         </>
       )}
 
-      {/* Pioche */}
-      {state.phase === "draw_phase" && (
+      {state.phase === "draw_phase" && expectedDrawPlayerId && (
         <button
           onClick={() =>
             dispatch({
               type: "draw_card",
-              playerId: state.currentPlayerId!,
+              playerId: expectedDrawPlayerId,
             })
           }
         >
-          Piocher ({state.currentPlayerId})
+          Piocher ({expectedDrawPlayerId})
         </button>
       )}
 
-      {/* Score */}
       {state.phase === "round_scoring" && (
         <button onClick={() => dispatch({ type: "score_round" })}>
           Calculer le score
         </button>
       )}
 
-      {/* Manche suivante */}
       {state.phase === "round_transition" && (
         <button onClick={() => dispatch({ type: "next_round" })}>
           Manche suivante
