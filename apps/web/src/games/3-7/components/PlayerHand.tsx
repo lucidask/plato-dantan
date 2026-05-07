@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 import type { Card } from "card-core";
+import PlayingCard from "./PlayingCard/PlayingCard";
 
 type PlayerHandProps = {
   title: string;
@@ -19,7 +20,7 @@ function PlayerHand({
       if (disabled) return;
       onCardClick?.(card);
     },
-    [disabled, onCardClick]
+    [disabled, onCardClick],
   );
 
   return (
@@ -28,14 +29,12 @@ function PlayerHand({
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {cards.map((card) => (
-          <button
+          <PlayingCard
             key={card.id}
+            card={card}
             disabled={disabled}
-            onClick={() => handleCardClick(card)}
-            style={{ padding: 10, cursor: disabled ? "not-allowed" : "pointer" }}
-          >
-            {card.shortLabel}
-          </button>
+            onClick={handleCardClick}
+          />
         ))}
       </div>
     </div>

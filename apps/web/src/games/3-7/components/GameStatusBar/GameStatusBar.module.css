@@ -1,0 +1,33 @@
+.statusBar {
+  width: 100%;
+  max-width: 1220px;
+  margin: 16px auto 0;
+  padding: 14px 18px;
+  border: 1px solid #d8d8d8;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  box-sizing: border-box;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 15px;
+  color: #222;
+}
+
+@media (max-width: 700px) {
+  .statusBar {
+    flex-direction: column;
+  }
+}

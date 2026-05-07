@@ -1,0 +1,44 @@
+.card {
+  width: 64px;
+  height: 92px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  position: relative;
+  font-weight: 700;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.card:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+.card:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.red {
+  color: #c62828;
+}
+
+.black {
+  color: #1f1f1f;
+}
+
+.topLabel {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 14px;
+}
+
+.centerLabel {
+  font-size: 24px;
+}

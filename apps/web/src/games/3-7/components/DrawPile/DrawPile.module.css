@@ -1,0 +1,51 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.drawPile {
+  width: 72px;
+  height: 100px;
+  border: 2px solid #222;
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.18) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255,255,255,0.18) 25%, transparent 25%),
+    #26324a;
+  background-size: 18px 18px;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  box-shadow:
+    4px 4px 0 #1b2335,
+    8px 8px 0 #111827;
+
+  transition:
+    transform 120ms ease,
+    opacity 120ms ease;
+}
+
+.drawPile:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.drawPile:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.count {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.playerLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+}

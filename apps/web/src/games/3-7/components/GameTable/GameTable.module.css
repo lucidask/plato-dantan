@@ -62,3 +62,31 @@
     order: -1;
   }
 }
+
+.centerZone {
+  position: relative;
+  border-radius: 20px;
+  background: white;
+  border: 1px dashed #d0d0d0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.centerContent {
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableRight {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

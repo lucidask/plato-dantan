@@ -1,0 +1,32 @@
+.trickArea {
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyText {
+  color: #777;
+  font-size: 15px;
+}
+
+.cards {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.playedCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.playerId {
+  font-size: 13px;
+  color: #555;
+}

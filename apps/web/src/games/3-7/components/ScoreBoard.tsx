@@ -1,3 +1,5 @@
+import { getTeamLabel } from "../mappers/playerLabels";
+
 type ScoreBoardProps = {
   scores: Record<string, number>;
 };
@@ -26,7 +28,7 @@ export default function ScoreBoard({ scores }: ScoreBoardProps) {
               borderRadius: 8,
             }}
           >
-            <strong>{teamId}</strong>
+            <strong>{getTeamLabel(teamId)}</strong>
             <div>{score} point(s)</div>
           </div>
         ))}

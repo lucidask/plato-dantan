@@ -1,4 +1,5 @@
 import type { Card } from "card-core";
+import { getTeamLabel } from "../mappers/playerLabels";
 
 type RoundPointsPreviewProps = {
   wonCardsByOwner: Record<string, Card[]>;
@@ -47,7 +48,7 @@ export default function RoundPointsPreview({
                 boxSizing: "border-box",
               }}
             >
-              <strong>{ownerId}</strong>
+              <strong>{getTeamLabel(ownerId)}</strong>
               <div>As : {aces}</div>
               <div>Trios : {trios}</div>
               <div>
