@@ -42,14 +42,14 @@
 .bottom {
   width: 620px;
   height: 220px;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 140px 1fr 140px;
 }
 
 .left,
 .right {
-   width: 220px;
+  width: 220px;
   height: 620px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 140px 1fr 140px;
 }
 
 .half {
@@ -102,4 +102,15 @@
   justify-content: flex-start;
 
   z-index: 5;
+}
+
+.pileSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px;
+
+  font-weight: 700;
+  box-sizing: border-box;
 }

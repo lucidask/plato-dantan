@@ -3,19 +3,51 @@ import TrickArea from "../components/TrickArea/TrickArea";
 import InitialRevealArea from "../components/InitialRevealArea/InitialRevealArea";
 import { useAutoResolveTrick } from "../hooks/useAutoResolveTrick";
 import { useAutoStartRound } from "../hooks/useAutoStartRound";
-import { useCallback } from "react";
+import { useCallback, useRef, useState, useMemo } from "react";
 import GameTable from "../components/GameTable/GameTable";
 import GameStatusBar from "../components/GameStatusBar/GameStatusBar";
 import DrawPile from "../components/DrawPile/DrawPile";
 import { getPlayerLabel } from "../mappers/playerLabels";
 import TrouverFlag from "../components/TrouverFlag/TrouverFlag";
-import PlayerHand from "../components/PlayerHand";
+import PlayerHand from "../components/PlayerHand/PlayerHand";
 import PlayerScorePanel from "../components/PlayerScorePanel/PlayerScorePanel";
 import RoundControlPanel from "../components/RoundControlPanel/RoundControlPanel";
 import type { Card } from "card-core";
+import WonPile from "../components/WonPile/WonPile";
+
+const RANK_ORDER = ["7", "8", "J", "Q", "K", "A", "9", "10"] as const;
+
+function getPlayableCardIds(hand: Card[], currentTrick: { card: Card }[]) {
+  if (currentTrick.length === 0) return undefined;
+
+  const leadCard = currentTrick[0].card;
+  const cardsOfLeadSuit = hand.filter((card) => card.suit === leadCard.suit);
+
+  if (cardsOfLeadSuit.length === 0) return undefined;
+
+  const leadRankIndex = RANK_ORDER.indexOf(
+    leadCard.rank as (typeof RANK_ORDER)[number],
+  );
+
+  const strongerCards = cardsOfLeadSuit.filter(
+    (card) =>
+      RANK_ORDER.indexOf(card.rank as (typeof RANK_ORDER)[number]) >
+      leadRankIndex,
+  );
+
+  const legalCards = strongerCards.length > 0 ? strongerCards : cardsOfLeadSuit;
+
+  if (legalCards.length === hand.length) return undefined;
+
+  return legalCards.map((card) => card.id);
+}
 
 export default function Game37Screen() {
   const { state, dispatch } = useGame37LocalMatch();
+  const [highlightedCardId, setHighlightedCardId] = useState<string | null>(
+    null,
+  );
+  const highlightedTimeoutRef = useRef<number | null>(null);
 
   useAutoResolveTrick({
     state,
@@ -120,6 +152,26 @@ export default function Game37Screen() {
     state.phase !== "round_transition" &&
     state.phase !== "match_end";
 
+  const playableCardIdsP1 = useMemo(() => {
+    if (state.phase !== "trick_play") return undefined;
+    if (state.currentPlayerId !== "player-1") return undefined;
+
+    return getPlayableCardIds(
+      state.hands["player-1"] || [],
+      state.currentTrick,
+    );
+  }, [state.phase, state.currentPlayerId, state.hands, state.currentTrick]);
+
+  const playableCardIdsP2 = useMemo(() => {
+    if (state.phase !== "trick_play") return undefined;
+    if (state.currentPlayerId !== "player-2") return undefined;
+
+    return getPlayableCardIds(
+      state.hands["player-2"] || [],
+      state.currentTrick,
+    );
+  }, [state.phase, state.currentPlayerId, state.hands, state.currentTrick]);
+
   return (
     <div style={{ padding: 20 }}>
       <h1>Jeu 3-7</h1>
@@ -175,12 +227,24 @@ export default function Game37Screen() {
                   ? getPlayerLabel(expectedDrawPlayerId)
                   : undefined
               }
-              expectedPlayerPosition={
-                expectedDrawPlayerId === "player-2" ? "top" : "bottom"
-              }
               disabled={!canDraw}
               onDraw={() => {
                 if (!canDraw || !expectedDrawPlayerId) return;
+
+                const drawnCard = state.drawPile[0] ?? null;
+
+                if (drawnCard) {
+                  setHighlightedCardId(drawnCard.id);
+
+                  if (highlightedTimeoutRef.current !== null) {
+                    window.clearTimeout(highlightedTimeoutRef.current);
+                  }
+
+                  highlightedTimeoutRef.current = window.setTimeout(() => {
+                    setHighlightedCardId(null);
+                    highlightedTimeoutRef.current = null;
+                  }, 1800);
+                }
 
                 dispatch({
                   type: "draw_card",
@@ -190,40 +254,48 @@ export default function Game37Screen() {
             />
           ) : null
         }
-        topInner={
+        topScore={
           <PlayerScorePanel
             teamId="team-2"
             score={state.scoreByTeam["team-2"] || 0}
             wonCards={state.wonCardsByOwner["team-2"] || []}
           />
         }
-        bottomInner={
+        bottomScore={
           <PlayerScorePanel
             teamId="team-1"
             score={state.scoreByTeam["team-1"] || 0}
             wonCards={state.wonCardsByOwner["team-1"] || []}
           />
         }
-        topOuter={
+        topCard={
           <PlayerHand
             cards={state.hands["player-2"] || []}
             disabled={
               state.phase !== "trick_play" ||
               state.currentPlayerId !== "player-2"
             }
+            orientation="top"
+            highlightedCardId={highlightedCardId}
+            playableCardIds={playableCardIdsP2}
             onCardClick={handlePlayCardP2}
           />
         }
-        bottomOuter={
+        bottomCard={
           <PlayerHand
             cards={state.hands["player-1"] || []}
             disabled={
               state.phase !== "trick_play" ||
               state.currentPlayerId !== "player-1"
             }
+            orientation="bottom"
+            highlightedCardId={highlightedCardId}
+            playableCardIds={playableCardIdsP1}
             onCardClick={handlePlayCardP1}
           />
         }
+        topPile={<WonPile cards={state.wonCardsByOwner["team-2"] || []} />}
+        bottomPile={<WonPile cards={state.wonCardsByOwner["team-1"] || []} />}
       />
     </div>
   );

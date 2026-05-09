@@ -3,7 +3,6 @@ import styles from "./DrawPile.module.css";
 type DrawPileProps = {
   count: number;
   expectedPlayerLabel?: string;
-  expectedPlayerPosition?: "top" | "bottom";
   disabled?: boolean;
   onDraw?: () => void;
 };
@@ -11,19 +10,11 @@ type DrawPileProps = {
 export default function DrawPile({
   count,
   expectedPlayerLabel,
-  expectedPlayerPosition,
   disabled = false,
   onDraw,
 }: DrawPileProps) {
   return (
     <div className={styles.wrapper}>
-      {expectedPlayerLabel &&
-        expectedPlayerPosition === "top" && (
-          <span className={styles.playerLabel}>
-            {expectedPlayerLabel}
-          </span>
-        )}
-
       <button
         type="button"
         className={styles.drawPile}
@@ -33,13 +24,13 @@ export default function DrawPile({
       >
         <span className={styles.count}>{count}</span>
       </button>
+      {expectedPlayerLabel && (
+        <div className={styles.drawIndicator}>
+          <span className={styles.pointer}>👆</span>
 
-      {expectedPlayerLabel &&
-        expectedPlayerPosition === "bottom" && (
-          <span className={styles.playerLabel}>
-            {expectedPlayerLabel}
-          </span>
-        )}
+          <span className={styles.playerLabel}>{expectedPlayerLabel}</span>
+        </div>
+      )}
     </div>
   );
 }

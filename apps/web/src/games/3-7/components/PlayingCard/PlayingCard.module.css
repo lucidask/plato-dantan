@@ -1,6 +1,6 @@
 .card {
-  width: 64px;
-  height: 92px;
+  width: 52px;
+  height: 76px;
   border: 1px solid #d0d0d0;
   border-radius: 10px;
   background: white;
@@ -34,11 +34,11 @@
 
 .topLabel {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  font-size: 14px;
+  top: 6px;
+  left: 6px;
+  font-size: 11px;
 }
 
 .centerLabel {
-  font-size: 24px;
+  font-size: 19px;
 }

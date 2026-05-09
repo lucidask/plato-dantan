@@ -24,29 +24,25 @@ export default function InitialRevealArea({
               <PlayingCard card={card} disabled />
               <span>{getPlayerLabel(playerId)}</span>
             </div>
-          ) : null
+          ) : null,
         )}
       </div>
 
       {expectedPlayerId && (
         <div className={styles.initialDeckZone}>
-          {expectedPlayerId === "player-2" && (
-            <span className={styles.playerLabel}>
-              {getPlayerLabel(expectedPlayerId)}
-            </span>
-          )}
-
           <InitialDeck
             disabled={!onRevealCard}
             onClick={() => onRevealCard?.(expectedPlayerId)}
             label="Lever"
           />
 
-          {expectedPlayerId === "player-1" && (
+          <div className={styles.drawIndicator}>
+            <span className={styles.pointer}>👆</span>
+
             <span className={styles.playerLabel}>
               {getPlayerLabel(expectedPlayerId)}
             </span>
-          )}
+          </div>
         </div>
       )}
     </section>

@@ -1,6 +1,6 @@
 .revealArea {
   width: 100%;
-  min-height: 180px;
+ height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,4 +35,27 @@
   font-size: 12px;
   font-weight: 700;
   color: #333;
+}
+
+.drawIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.pointer {
+  font-size: 18px;
+  animation: pointerBounce 900ms ease-in-out infinite;
+}
+
+@keyframes pointerBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
