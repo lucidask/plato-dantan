@@ -1,0 +1,31 @@
+.panel {
+  width: 100%;
+  max-width: 240px;
+  min-width: 0;
+  margin-top: 0;
+  padding: 10px 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+.team {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.details {
+  margin-top: 8px;
+  color: #666;
+  font-size: 12px;
+}

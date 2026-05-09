@@ -1,0 +1,42 @@
+.panel {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  min-width: 220px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.scores {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.scoreRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+  background: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #f2f2f2;
+}

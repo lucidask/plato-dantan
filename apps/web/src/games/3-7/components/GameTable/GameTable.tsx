@@ -1,33 +1,51 @@
+import type { ReactNode } from "react";
 import styles from "./GameTable.module.css";
 
 type GameTableProps = {
-  top: React.ReactNode;
-  center: React.ReactNode;
-  bottom: React.ReactNode;
-  tableRight?: React.ReactNode;
-  sidebar?: React.ReactNode;
+  center: ReactNode;
+  drawPile?: ReactNode;
+  topInner?: ReactNode;
+  bottomInner?: ReactNode;
+  topOuter?: ReactNode;
+  bottomOuter?: ReactNode;
 };
 
 export default function GameTable({
-  top,
   center,
-  bottom,
-  tableRight,
-  sidebar,
+  drawPile,
+  topInner,
+  bottomInner,
+  topOuter,
+  bottomOuter,
 }: GameTableProps) {
   return (
     <section className={styles.gameTable}>
-      <main className={styles.playArea}>
-        <div className={styles.topZone}>{top}</div>
-        <div className={styles.centerZone}>
-          <div className={styles.centerContent}>{center}</div>
+      <div className={styles.tableTools}>{drawPile}</div>
+      <div className={`${styles.section} ${styles.top}`}>
+        <div className={styles.half}>{topOuter ?? "topOuter"}</div>
+        <div className={styles.half}>{topInner ?? "topInner"}</div>
+      </div>
 
-          {tableRight && <div className={styles.tableRight}>{tableRight}</div>}
+      <div className={styles.middle}>
+        <div className={`${styles.section} ${styles.left}`}>
+          <div className={styles.half}>leftOuter</div>
+          <div className={styles.half}>leftInner</div>
         </div>
-        <div className={styles.bottomZone}>{bottom}</div>
-      </main>
 
-      {sidebar && <aside className={styles.sidebar}>{sidebar}</aside>}
+        <div className={`${styles.section} ${styles.center}`}>
+          <div className={styles.centerContent}>{center}</div>
+        </div>
+
+        <div className={`${styles.section} ${styles.right}`}>
+          <div className={styles.half}>rightInner</div>
+          <div className={styles.half}>rightOuter</div>
+        </div>
+      </div>
+
+      <div className={`${styles.section} ${styles.bottom}`}>
+        <div className={styles.half}>{bottomInner ?? "bottomInner"}</div>
+        <div className={styles.half}>{bottomOuter ?? "bottomOuter"}</div>
+      </div>
     </section>
   );
 }

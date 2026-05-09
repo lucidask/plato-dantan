@@ -1,9 +1,6 @@
 import { useGame37LocalMatch } from "../hooks/useGame37LocalMatch";
-import PlayerHand from "../components/PlayerHand";
 import TrickArea from "../components/TrickArea/TrickArea";
 import InitialRevealArea from "../components/InitialRevealArea/InitialRevealArea";
-import ScoreBoard from "../components/ScoreBoard";
-import RoundPointsPreview from "../components/RoundPointsPreview";
 import { useAutoResolveTrick } from "../hooks/useAutoResolveTrick";
 import { useAutoStartRound } from "../hooks/useAutoStartRound";
 import { useCallback } from "react";
@@ -11,7 +8,11 @@ import GameTable from "../components/GameTable/GameTable";
 import GameStatusBar from "../components/GameStatusBar/GameStatusBar";
 import DrawPile from "../components/DrawPile/DrawPile";
 import { getPlayerLabel } from "../mappers/playerLabels";
-import TrouverBanner from "../components/TrouverBanner/TrouverBanner";
+import TrouverFlag from "../components/TrouverFlag/TrouverFlag";
+import PlayerHand from "../components/PlayerHand";
+import PlayerScorePanel from "../components/PlayerScorePanel/PlayerScorePanel";
+import RoundControlPanel from "../components/RoundControlPanel/RoundControlPanel";
+import type { Card } from "card-core";
 
 export default function Game37Screen() {
   const { state, dispatch } = useGame37LocalMatch();
@@ -31,7 +32,7 @@ export default function Game37Screen() {
   });
 
   const handlePlayCardP1 = useCallback(
-    (card) => {
+    (card: Card) => {
       if (state.phase !== "trick_play") return;
       if (state.currentPlayerId !== "player-1") return;
 
@@ -45,7 +46,7 @@ export default function Game37Screen() {
   );
 
   const handlePlayCardP2 = useCallback(
-    (card) => {
+    (card: Card) => {
       if (state.phase !== "trick_play") return;
       if (state.currentPlayerId !== "player-2") return;
 
@@ -74,7 +75,6 @@ export default function Game37Screen() {
     (playerId: string) => {
       if (state.phase !== "initial_card_reveal") return;
       if (state.initialReveal[playerId] !== null) return;
-
       dispatch({
         type: "reveal_initial_card",
         playerId,
@@ -93,9 +93,32 @@ export default function Game37Screen() {
   const shouldShowInitialReveal =
     state.phase === "initial_card_reveal" || state.phase === "round_setup";
 
-  const latestTrouverEvent = state.eventQueue
-    .filter((event) => event.type === "trouver")
-    .slice(-1)[0];
+  type TrouverEvent = Extract<
+    (typeof state.eventQueue)[number],
+    { type: "trouver" }
+  >;
+
+  const latestTrouverIndex = state.eventQueue.findLastIndex(
+    (event) => event.type === "trouver",
+  );
+
+  const hasCardBeenPlayedAfterTrouver =
+    latestTrouverIndex !== -1 &&
+    state.eventQueue
+      .slice(latestTrouverIndex + 1)
+      .some((event) => event.type === "card_played");
+
+  const latestTrouverEvent: TrouverEvent | null =
+    latestTrouverIndex !== -1 &&
+    !hasCardBeenPlayedAfterTrouver &&
+    state.eventQueue[latestTrouverIndex].type === "trouver"
+      ? state.eventQueue[latestTrouverIndex]
+      : null;
+
+  const shouldShowTableControls =
+    state.phase !== "round_scoring" &&
+    state.phase !== "round_transition" &&
+    state.phase !== "match_end";
 
   return (
     <div style={{ padding: 20 }}>
@@ -104,36 +127,47 @@ export default function Game37Screen() {
       <GameStatusBar state={state} />
 
       <GameTable
-        top={
-          <PlayerHand
-            title="Joueur 2"
-            cards={state.hands["player-2"] || []}
-            disabled={
-              state.phase !== "trick_play" ||
-              state.currentPlayerId !== "player-2"
-            }
-            onCardClick={handlePlayCardP2}
-          />
-        }
         center={
-          <div style={{ position: "relative", width: "100%" }}>
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {shouldShowInitialReveal ? (
               <InitialRevealArea
                 reveal={state.initialReveal}
                 expectedPlayerId={expectedInitialRevealPlayerId}
                 onRevealCard={handleRevealInitialCard}
               />
+            ) : state.phase === "round_scoring" ||
+              state.phase === "round_transition" ||
+              state.phase === "match_end" ? (
+              <RoundControlPanel state={state} dispatch={dispatch} />
             ) : (
               <TrickArea cards={state.currentTrick} />
             )}
 
-            {latestTrouverEvent && (
-              <TrouverBanner playerId={latestTrouverEvent.payload.playerId} />
-            )}
+            {latestTrouverEvent &&
+              state.phase !== "round_scoring" &&
+              state.phase !== "round_transition" &&
+              state.phase !== "match_end" && (
+                <TrouverFlag
+                  position={
+                    latestTrouverEvent.payload.playerId === "player-2"
+                      ? "top"
+                      : "bottom"
+                  }
+                />
+              )}
           </div>
         }
-        tableRight={
-          !shouldShowInitialReveal ? (
+        drawPile={
+          !shouldShowInitialReveal && shouldShowTableControls ? (
             <DrawPile
               count={state.drawPile.length}
               expectedPlayerLabel={
@@ -156,9 +190,32 @@ export default function Game37Screen() {
             />
           ) : null
         }
-        bottom={
+        topInner={
+          <PlayerScorePanel
+            teamId="team-2"
+            score={state.scoreByTeam["team-2"] || 0}
+            wonCards={state.wonCardsByOwner["team-2"] || []}
+          />
+        }
+        bottomInner={
+          <PlayerScorePanel
+            teamId="team-1"
+            score={state.scoreByTeam["team-1"] || 0}
+            wonCards={state.wonCardsByOwner["team-1"] || []}
+          />
+        }
+        topOuter={
           <PlayerHand
-            title="Joueur 1"
+            cards={state.hands["player-2"] || []}
+            disabled={
+              state.phase !== "trick_play" ||
+              state.currentPlayerId !== "player-2"
+            }
+            onCardClick={handlePlayCardP2}
+          />
+        }
+        bottomOuter={
+          <PlayerHand
             cards={state.hands["player-1"] || []}
             disabled={
               state.phase !== "trick_play" ||
@@ -166,12 +223,6 @@ export default function Game37Screen() {
             }
             onCardClick={handlePlayCardP1}
           />
-        }
-        sidebar={
-          <>
-            <ScoreBoard scores={state.scoreByTeam} />
-            <RoundPointsPreview wonCardsByOwner={state.wonCardsByOwner} />
-          </>
         }
       />
     </div>
