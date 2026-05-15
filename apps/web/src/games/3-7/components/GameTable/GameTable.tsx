@@ -10,6 +10,8 @@ type GameTableProps = {
   bottomCard?: ReactNode;
   topPile?: ReactNode;
   bottomPile?: ReactNode;
+  topActive?: boolean;
+  bottomActive?: boolean;
 };
 
 export default function GameTable({
@@ -21,13 +23,24 @@ export default function GameTable({
   bottomCard,
   topPile,
   bottomPile,
+  topActive,
+  bottomActive,
 }: GameTableProps) {
   return (
     <section className={styles.gameTable}>
       <div className={styles.tableTools}>{drawPile}</div>
       <div className={`${styles.section} ${styles.top}`}>
         <div className={styles.pileSlot}>{topPile ?? "topPile"}</div>
-        <div className={styles.half}>{topCard ?? "topCard"}</div>
+        <div className={styles.half}>
+          <div className={styles.topTurnIndicatorWrapper}>
+            <span
+              className={`${styles.turnDot} ${
+                topActive ? styles.active : styles.inactive
+              }`}
+            />
+          </div>
+          {topCard ?? "topCard"}
+        </div>
         <div className={styles.half}>{topScore ?? "topScore"}</div>
       </div>
 
@@ -50,7 +63,17 @@ export default function GameTable({
 
       <div className={`${styles.section} ${styles.bottom}`}>
         <div className={styles.half}>{bottomScore ?? "bottomScore"}</div>
-        <div className={styles.half}>{bottomCard ?? "bottomCard"}</div>
+        <div className={styles.half}>
+          <div className={styles.bottomTurnIndicatorWrapper}>
+            <span
+              className={`${styles.turnDot} ${
+                bottomActive ? styles.active : styles.inactive
+              }`}
+            />
+          </div>
+
+          {bottomCard ?? "bottomCard"}
+        </div>
 
         <div className={styles.pileSlot}>{bottomPile ?? "bottomPile"}</div>
       </div>

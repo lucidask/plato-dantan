@@ -78,6 +78,24 @@ export function useGame37Animations() {
     to: null,
   });
 
+  const [roundScoringMotion, setRoundScoringMotion] = useState<{
+    active: boolean;
+    top: {
+      cards: Card[];
+      from: Point | null;
+      to: Point | null;
+    };
+    bottom: {
+      cards: Card[];
+      from: Point | null;
+      to: Point | null;
+    };
+  }>({
+    active: false,
+    top: { cards: [], from: null, to: null },
+    bottom: { cards: [], from: null, to: null },
+  });
+
   const registerAnimationTimeout = useCallback(
     (callback: () => void, delay: number) => {
       const timeoutId = window.setTimeout(() => {
@@ -133,6 +151,12 @@ export function useGame37Animations() {
       from: null,
       to: null,
     });
+
+    setRoundScoringMotion({
+      active: false,
+      top: { cards: [], from: null, to: null },
+      bottom: { cards: [], from: null, to: null },
+    });
   }, []);
 
   useEffect(() => {
@@ -170,5 +194,7 @@ export function useGame37Animations() {
 
     registerAnimationTimeout,
     cancelAnimations,
+    roundScoringMotion,
+    setRoundScoringMotion,
   };
 }

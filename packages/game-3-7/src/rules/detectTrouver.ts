@@ -30,11 +30,30 @@ export function detectTrouver(
   const sameSuit =
     drawnCard.suit === drawContext.winningCard.suit;
 
+  if (!sameSuit) {
+    return {
+      shouldAnnounce: false,
+      strongerThanWinningCard: false,
+    };
+  }
+
+  const loserFollowedSuit =
+    drawContext.playersWhoFollowedSuit.includes(playerId);
+
   const strongerThanWinningCard =
-    sameSuit && isStronger(drawnCard, drawContext.winningCard);
+    isStronger(drawnCard, drawContext.winningCard);
+
+  const shouldAnnounce =
+    (!loserFollowedSuit && sameSuit) ||
+    (
+      loserFollowedSuit &&
+      sameSuit &&
+      strongerThanWinningCard
+    );
 
   return {
-    shouldAnnounce: sameSuit,
-    strongerThanWinningCard,
+    shouldAnnounce,
+    strongerThanWinningCard:
+      shouldAnnounce && strongerThanWinningCard,
   };
 }

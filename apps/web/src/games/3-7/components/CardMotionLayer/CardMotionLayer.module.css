@@ -166,3 +166,25 @@
     rotate: 360deg;
   }
 }
+
+.roundScoringCollectCard {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: roundScoringCollectFly 700ms ease-in forwards;
+}
+
+@keyframes roundScoringCollectFly {
+  from {
+    left: var(--collect-from-x);
+    top: var(--collect-from-y);
+    opacity: 1;
+    scale: 1;
+  }
+
+  to {
+    left: var(--collect-to-x);
+    top: var(--collect-to-y);
+    opacity: 0;
+    scale: 0.88;
+  }
+}

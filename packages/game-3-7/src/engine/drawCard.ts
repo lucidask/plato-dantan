@@ -40,6 +40,10 @@ if (!state.drawContext) {
     return state;
   }
 
+  const playersWhoFollowedSuit = lastTrickWonEvent.payload.playedCards
+  .filter((played) => played.card.suit === lastTrickWonEvent.payload.leadSuit)
+  .map((played) => played.playerId);
+
   state.drawContext = {
     expectedOrder: [winnerId, loserId],
     currentIndex: 0,
@@ -47,6 +51,7 @@ if (!state.drawContext) {
     winningCard: lastTrickWonEvent.payload.winningCard,
     winnerPlayerId: winnerId,
     winnerTeamId: state.players.find((p) => p.id === winnerId)!.teamId,
+    playersWhoFollowedSuit,
   };
 }
 

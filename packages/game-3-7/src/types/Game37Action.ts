@@ -44,4 +44,6 @@ export type Game37Action =
   | ResolveTrickAction
   | DrawCardAction
   | ScoreRoundAction
-  | NextRoundAction;
+  | NextRoundAction
+  | { type: "debug_force_round_scoring" } 
+  | { type: "debug_simulate_completed_round" };

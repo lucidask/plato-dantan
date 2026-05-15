@@ -7,6 +7,7 @@ import DrawPile from "../DrawPile/DrawPile";
 import PlayerHand from "../PlayerHand/PlayerHand";
 import PlayerScorePanel from "../PlayerScorePanel/PlayerScorePanel";
 import WonPile from "../WonPile/WonPile";
+import RoundScoringShowcase from "../RoundScoringShowcase/RoundScoringShowcase";
 
 import { getPlayerLabel } from "../../mappers/playerLabels";
 
@@ -39,18 +40,11 @@ type Props = {
 
   canDraw: boolean;
 
-  handleRevealInitialCard: (
-    playerId: string,
-    element: HTMLElement,
-  ) => void;
+  handleRevealInitialCard: (playerId: string, element: HTMLElement) => void;
 
   handleDrawCard: (element: HTMLElement) => void;
 
-  handlePlayCard: (
-    playerId: string,
-    card: any,
-    element: HTMLElement,
-  ) => void;
+  handlePlayCard: (playerId: string, card: any, element: HTMLElement) => void;
 
   highlightedCardId: string | null;
 
@@ -68,9 +62,11 @@ type Props = {
 
   trickCollectMotion: any;
 
-  getVisibleWonCards: (
-    teamId: string,
-  ) => any[];
+  getVisibleWonCards: (teamId: string) => any[];
+
+  roundScoringMotion: {
+    active: boolean;
+  };
 };
 
 export default function Game37TableView({
@@ -115,7 +111,13 @@ export default function Game37TableView({
   dealingVisibleCount,
 
   getVisibleWonCards,
+  roundScoringMotion,
 }: Props) {
+  const hideWonPiles =
+    roundScoringMotion.active ||
+    state.phase === "round_transition" ||
+    state.phase === "match_end";
+
   return (
     <GameTable
       center={
@@ -147,10 +149,18 @@ export default function Game37TableView({
                 onRevealCard={handleRevealInitialCard}
               />
             </div>
-          ) : state.phase === "round_scoring" ||
-            state.phase === "round_transition" ||
-            state.phase === "match_end" ? (
-            <RoundControlPanel state={state} dispatch={dispatch} />
+          ) : (state.phase === "round_scoring" ||
+              state.phase === "round_transition" ||
+              state.phase === "match_end") &&
+            !roundScoringMotion.active ? (
+            <RoundScoringShowcase
+              topCards={state.wonCardsByOwner["team-2"] || []}
+              bottomCards={state.wonCardsByOwner["team-1"] || []}
+              topScore={state.scoreByTeam["team-2"] || 0}
+              bottomScore={state.scoreByTeam["team-1"] || 0}
+              onNextRound={() => dispatch({ type: "next_round" })}
+              showcaseRef={centerRef}
+            />
           ) : (
             <TrickArea
               cards={state.currentTrick}
@@ -172,6 +182,8 @@ export default function Game37TableView({
             )}
         </div>
       }
+      topActive={state.currentPlayerId === "player-2"}
+      bottomActive={state.currentPlayerId === "player-1"}
       drawPile={
         !shouldShowInitialReveal && shouldShowTableControls ? (
           <div ref={drawPileRef}>
@@ -256,12 +268,12 @@ export default function Game37TableView({
       }
       topPile={
         <div ref={topWonPileRef}>
-          <WonPile cards={getVisibleWonCards("team-2")} />
+          {!hideWonPiles && <WonPile cards={getVisibleWonCards("team-2")} />}
         </div>
       }
       bottomPile={
         <div ref={bottomWonPileRef}>
-          <WonPile cards={getVisibleWonCards("team-1")} />
+          {!hideWonPiles && <WonPile cards={getVisibleWonCards("team-1")} />}
         </div>
       }
     />

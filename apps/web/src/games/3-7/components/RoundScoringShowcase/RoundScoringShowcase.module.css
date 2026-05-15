@@ -1,0 +1,21 @@
+.cardsRow {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.scoreCardWrapper {
+  animation: scoreCardIn 260ms ease-out both;
+}
+
+@keyframes scoreCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

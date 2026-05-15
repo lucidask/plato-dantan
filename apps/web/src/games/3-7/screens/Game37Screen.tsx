@@ -14,6 +14,8 @@ import { useDrawCardAnimation } from "../hooks/useDrawCardAnimation";
 import { useDealAnimation } from "../hooks/useDealAnimation";
 import { useTrickCollectAnimation } from "../hooks/useTrickCollectAnimation";
 import Game37TableView from "../components/Game37TableView/Game37TableView";
+import Game37DebugPanel from "../debug/Game37DebugPanel";
+import { useRoundScoringAnimation } from "../hooks/useRoundScoringAnimation";
 
 export default function Game37Screen() {
   const { state, dispatch } = useGame37LocalMatch();
@@ -93,10 +95,13 @@ export default function Game37Screen() {
     setDealMotions,
     trickCollectMotion,
     setTrickCollectMotion,
+    roundScoringMotion,
+    setRoundScoringMotion,
     initialRevealMotion,
     setInitialRevealMotion,
     registerAnimationTimeout,
   } = useGame37Animations();
+
   const { handlePlayCard } = usePlayCardAnimation({
     state,
     dispatch,
@@ -143,6 +148,15 @@ export default function Game37Screen() {
     topWonPileRef,
     bottomWonPileRef,
     setTrickCollectMotion,
+    registerAnimationTimeout,
+  });
+
+  useRoundScoringAnimation({
+    state,
+    centerRef,
+    topWonPileRef,
+    bottomWonPileRef,
+    setRoundScoringMotion,
     registerAnimationTimeout,
   });
 
@@ -201,6 +215,7 @@ export default function Game37Screen() {
         dealingVisibleCount={dealingVisibleCount}
         trickCollectMotion={trickCollectMotion}
         getVisibleWonCards={getVisibleWonCardsForTeam}
+        roundScoringMotion={roundScoringMotion}
       />
 
       <CardMotionLayer
@@ -212,7 +227,11 @@ export default function Game37Screen() {
         drawMotion={drawMotion}
         dealMotions={dealMotions}
         initialRevealMotion={initialRevealMotion}
+        roundScoringMotion={roundScoringMotion}
       />
+      {import.meta.env.DEV && (
+        <Game37DebugPanel state={state} dispatch={dispatch} />
+      )}
     </div>
   );
 }

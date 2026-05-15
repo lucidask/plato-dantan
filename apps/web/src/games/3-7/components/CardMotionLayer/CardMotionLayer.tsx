@@ -35,6 +35,22 @@ type CardMotionLayerProps = {
     from: Point | null;
     to: Point | null;
   };
+
+  roundScoringMotion?: {
+    active: boolean;
+
+    top: {
+      cards: Card[];
+      from: Point | null;
+      to: Point | null;
+    };
+
+    bottom: {
+      cards: Card[];
+      from: Point | null;
+      to: Point | null;
+    };
+  };
 };
 
 export default function CardMotionLayer({
@@ -46,6 +62,7 @@ export default function CardMotionLayer({
   drawMotion,
   dealMotions,
   initialRevealMotion,
+  roundScoringMotion,
 }: CardMotionLayerProps) {
   const shouldShowCardMotion = active && card && from && to;
   const shouldShowTrickCollect =
@@ -53,17 +70,25 @@ export default function CardMotionLayer({
   const shouldShowDrawMotion =
     drawMotion?.active && drawMotion.from && drawMotion.to;
   const shouldShowDealMotions = dealMotions && dealMotions.length > 0;
+
   const shouldShowInitialRevealMotion =
     initialRevealMotion?.active &&
     initialRevealMotion.card &&
     initialRevealMotion.from &&
     initialRevealMotion.to;
+
+  const shouldShowRoundScoringMotion =
+    roundScoringMotion?.active &&
+    (roundScoringMotion.top.cards.length > 0 ||
+      roundScoringMotion.bottom.cards.length > 0);
+
   if (
     !shouldShowCardMotion &&
     !shouldShowTrickCollect &&
     !shouldShowDrawMotion &&
     !shouldShowDealMotions &&
-    !shouldShowInitialRevealMotion
+    !shouldShowInitialRevealMotion &&
+    !shouldShowRoundScoringMotion
   )
     return null;
 
@@ -150,6 +175,47 @@ export default function CardMotionLayer({
           <PlayingCard card={initialRevealMotion.card!} disabled />
         </div>
       )}
+      {shouldShowRoundScoringMotion &&
+        roundScoringMotion.top.cards.map((collectCard, index) => (
+          <div
+            key={`round-score-top-${collectCard.id}-${index}`}
+            className={styles.roundScoringCollectCard}
+            style={
+              {
+                "--collect-to-x": `${roundScoringMotion.top.to?.x ?? window.innerWidth / 2}px`,
+                "--collect-to-y": `${roundScoringMotion.top.to?.y ?? window.innerHeight / 2}px`,
+                "--collect-from-x": `${roundScoringMotion.top.from?.x ?? 0}px`,
+                "--collect-from-y": `${roundScoringMotion.top.from?.y ?? 0}px`,
+                left: `${roundScoringMotion.top.from?.x ?? 0}px`,
+                top: `${roundScoringMotion.top.from?.y ?? 0}px`,
+                animationDelay: `${index * 35}ms`,
+              } as CSSProperties
+            }
+          >
+            <div className={styles.cardBack} />
+          </div>
+        ))}
+
+      {shouldShowRoundScoringMotion &&
+        roundScoringMotion.bottom.cards.map((collectCard, index) => (
+          <div
+            key={`round-score-bottom-${collectCard.id}-${index}`}
+            className={styles.roundScoringCollectCard}
+            style={
+              {
+                "--collect-to-x": `${roundScoringMotion.bottom.to?.x ?? window.innerWidth / 2}px`,
+                "--collect-to-y": `${roundScoringMotion.bottom.to?.y ?? window.innerHeight / 2}px`,
+                "--collect-from-x": `${roundScoringMotion.bottom.from?.x ?? 0}px`,
+                "--collect-from-y": `${roundScoringMotion.bottom.from?.y ?? 0}px`,
+                left: `${roundScoringMotion.bottom.from?.x ?? 0}px`,
+                top: `${roundScoringMotion.bottom.from?.y ?? 0}px`,
+                animationDelay: `${index * 35}ms`,
+              } as CSSProperties
+            }
+          >
+            <div className={styles.cardBack} />
+          </div>
+        ))}
     </div>
   );
 }

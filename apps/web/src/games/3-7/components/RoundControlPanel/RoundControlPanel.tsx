@@ -21,15 +21,7 @@ export default function RoundControlPanel({
 
   return (
     <section className={styles.panel}>
-      {state.phase === "round_scoring" && (
-        <button
-          className={styles.button}
-          onClick={() => dispatch({ type: "score_round" })}
-        >
-          Calculer le score
-        </button>
-      )}
-
+      
       {state.phase === "round_transition" && (
         <>
           <h3 className={styles.title}>Scores après manche</h3>

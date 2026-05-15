@@ -28,6 +28,7 @@ export type DrawContext = {
   winningCard: Card;
   winnerPlayerId: string;
   winnerTeamId: string;
+  playersWhoFollowedSuit: string[];
 };
 
 export type Game37State = {

@@ -1,5 +1,6 @@
 import type { Card } from "../../../card-core/src";
 import type { Game37State } from "../types/Game37State";
+import { checkMatchEnd } from "../rules/checkMatchEnd";
 
 const TRIO_RANKS = ["9", "10", "J", "Q", "K"];
 
@@ -63,8 +64,7 @@ if (lastTrickWon?.type === "trick_won") {
   state.currentRoundStarterId = lastTrickWon.payload.winnerPlayerId;
 }
 
-state.phase = "round_transition";
 state.currentPlayerId = null;
 
-  return state;
+return checkMatchEnd(state, roundPointsByTeam);
 }
