@@ -6,7 +6,7 @@ type PlayingCardProps = {
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: (card: Card) => void;
+  onClick?: (card: Card, element: HTMLButtonElement) => void;
 };
 
 export default function PlayingCard({
@@ -23,9 +23,9 @@ export default function PlayingCard({
       type="button"
       className={`${styles.card} ${isRed ? styles.red : styles.black} ${className ?? ""}`}
       disabled={disabled}
-      onClick={() => {
+      onClick={(event) => {
         if (disabled) return;
-        onClick?.(card);
+        onClick?.(card, event.currentTarget);
       }}
       style={style}
     >

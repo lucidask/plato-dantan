@@ -11,14 +11,6 @@
   font-size: 15px;
 }
 
-.cards {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
 .playedCard {
   display: flex;
   flex-direction: column;
@@ -30,17 +22,75 @@
 
 @keyframes playedCardEnter {
   from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.96);
-  }
+  opacity: 0;
+  scale: 0.96;
+}
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+to {
+  opacity: 1;
+  scale: 1;
+}
 }
 
 .playerId {
   font-size: 13px;
   color: #555;
+}
+
+.latestCard {
+  z-index: 10;
+  animation:
+    playedCardEnter 180ms ease-out,
+    latestCardPulse 650ms ease-out;
+}
+
+@keyframes latestCardPulse {
+  0% {
+    filter: brightness(1);
+    scale: 1;
+  }
+
+  45% {
+    filter: brightness(1.15);
+    scale: 1.06;
+  }
+
+  100% {
+    filter: brightness(1);
+    scale: 1;
+  }
+}
+
+.cards {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.topPosition {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bottomPosition {
+  position: absolute;
+  bottom: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.leftPosition {
+  position: absolute;
+  left: 26%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rightPosition {
+  position: absolute;
+  right: 26%;
+  top: 50%;
+  transform: translateY(-50%);
 }

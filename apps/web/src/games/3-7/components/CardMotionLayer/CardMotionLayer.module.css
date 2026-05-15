@@ -1,0 +1,168 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cardFace {
+  position: absolute;
+
+  left: var(--from-x);
+  top: var(--from-y);
+
+  width: 52px;
+  height: 76px;
+
+  transform: translate(-50%, -50%);
+
+  animation: cardFly 600ms ease-in-out forwards;
+}
+
+@keyframes cardFly {
+  from {
+    left: var(--from-x);
+    top: var(--from-y);
+    opacity: 1;
+    scale: 1;
+  }
+
+  to {
+    left: var(--to-x);
+    top: var(--to-y);
+    opacity: 0.95;
+    scale: 1.04;
+  }
+}
+
+.collectCard {
+  position: absolute;
+
+  transform: translate(-50%, -50%);
+
+  animation: collectFly 700ms ease-in forwards;
+}
+
+.cardBack {
+  width: 52px;
+  height: 76px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255, 255, 255, 0.22) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.22) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.22) 25%, transparent 25%),
+    #304ffe;
+
+  background-size: 14px 14px;
+
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes collectFly {
+  from {
+    left: 50%;
+    top: 50%;
+    opacity: 1;
+    scale: 1;
+  }
+
+  to {
+    left: var(--collect-to-x);
+    top: var(--collect-to-y);
+    opacity: 0;
+    scale: 0.88;
+  }
+}
+
+.drawCard {
+  position: absolute;
+
+  left: var(--draw-from-x);
+  top: var(--draw-from-y);
+
+  transform: translate(-50%, -50%);
+
+  animation: drawFly 600ms ease-in-out forwards;
+}
+
+@keyframes drawFly {
+  from {
+    left: var(--draw-from-x);
+    top: var(--draw-from-y);
+    opacity: 1;
+    scale: 1;
+  }
+
+  to {
+    left: var(--draw-to-x);
+    top: var(--draw-to-y);
+    opacity: 0.96;
+    scale: 1.04;
+  }
+}
+
+.dealCard {
+  position: absolute;
+
+  left: var(--deal-from-x);
+  top: var(--deal-from-y);
+
+  transform: translate(-50%, -50%);
+
+  animation: dealFly 450ms ease-in-out forwards;
+}
+
+@keyframes dealFly {
+  0% {
+    left: var(--deal-from-x);
+    top: var(--deal-from-y);
+    opacity: 1;
+    scale: 1;
+  }
+
+  20% {
+    left: var(--deal-from-x);
+    top: calc(var(--deal-from-y) - 24px);
+    opacity: 1;
+    scale: 1.06;
+  }
+
+  100% {
+    left: var(--deal-to-x);
+    top: var(--deal-to-y);
+    opacity: 0.98;
+    scale: 1;
+  }
+}
+
+.initialRevealCard {
+  position: absolute;
+
+  left: var(--initial-from-x);
+  top: var(--initial-from-y);
+
+  transform: translate(-50%, -50%);
+
+  animation: initialRevealFly 650ms ease-in-out forwards;
+}
+
+@keyframes initialRevealFly {
+  from {
+    left: var(--initial-from-x);
+    top: var(--initial-from-y);
+    opacity: 1;
+    scale: 0.9;
+    rotate: 0deg;
+  }
+
+  to {
+    left: var(--initial-to-x);
+    top: var(--initial-to-y);
+    opacity: 1;
+    scale: 1;
+    rotate: 360deg;
+  }
+}

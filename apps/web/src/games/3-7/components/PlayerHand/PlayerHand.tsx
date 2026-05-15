@@ -1,7 +1,7 @@
 import type { Card } from "card-core";
 import PlayingCard from "../PlayingCard/PlayingCard";
 import styles from "./PlayerHand.module.css";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
 const SUIT_ORDER = ["clubs", "diamonds", "hearts", "spades"] as const;
@@ -11,9 +11,10 @@ type PlayerHandProps = {
   cards: Card[];
   disabled?: boolean;
   highlightedCardId?: string | null;
-  playableCardIds?: string[]; 
+  playableCardIds?: string[];
+  hiddenCardId?: string | null;
   orientation?: "bottom" | "top" | "left" | "right";
-  onCardClick?: (card: Card) => void;
+  onCardClick?: (card: Card, element: HTMLElement) => void;
 };
 
 function PlayerHand({
@@ -22,12 +23,20 @@ function PlayerHand({
   highlightedCardId = null,
   playableCardIds,
   orientation = "bottom",
+  hiddenCardId,
   onCardClick,
 }: PlayerHandProps) {
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const handleCardClick = useCallback(
-    (card: Card) => {
+    (card: Card, element: HTMLElement) => {
       if (disabled) return;
-      onCardClick?.(card);
+
+      setSelectedCardId(card.id);
+
+      window.setTimeout(() => {
+        onCardClick?.(card, element);
+        setSelectedCardId(null);
+      }, 140);
     },
     [disabled, onCardClick],
   );
@@ -65,12 +74,14 @@ function PlayerHand({
               styles.cardInHand,
               hasPlayableRestriction && isPlayable ? styles.playable : "",
               highlightedCardId === card.id ? styles.recentlyDrawn : "",
+              selectedCardId === card.id ? styles.selected : "",
             ].join(" ")}
             onClick={handleCardClick}
             style={
               {
                 "--card-index": index,
                 "--card-offset": offset,
+                opacity: hiddenCardId === card.id ? 0 : 1,
               } as CSSProperties
             }
           />

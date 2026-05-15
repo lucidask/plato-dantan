@@ -4,9 +4,8 @@ type DrawPileProps = {
   count: number;
   expectedPlayerLabel?: string;
   disabled?: boolean;
-  onDraw?: () => void;
+  onDraw?: (element: HTMLElement) => void;
 };
-
 export default function DrawPile({
   count,
   expectedPlayerLabel,
@@ -19,7 +18,7 @@ export default function DrawPile({
         type="button"
         className={styles.drawPile}
         disabled={disabled || count <= 0}
-        onClick={onDraw}
+        onClick={(event) => onDraw?.(event.currentTarget)}
         title="Pioche"
       >
         <span className={styles.count}>{count}</span>

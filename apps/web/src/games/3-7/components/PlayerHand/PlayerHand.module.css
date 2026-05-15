@@ -19,6 +19,10 @@
     rotate(calc(var(--card-offset) * 4deg));
 
   transform-origin: bottom center;
+
+  transition:
+    transform 160ms ease,
+    opacity 120ms ease;
 }
 
 .cardInHand:first-child {
@@ -74,4 +78,15 @@
 
 .right {
   transform: rotate(-90deg);
+}
+
+.selected {
+  z-index: 40;
+
+  transform: translateY(
+      calc((var(--card-offset) * var(--card-offset) * 1.2px) - 18px)
+    )
+    rotate(calc(var(--card-offset) * 4deg)) scale(1.06);
+
+  filter: brightness(1.08);
 }

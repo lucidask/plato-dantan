@@ -7,7 +7,7 @@ import styles from "./InitialRevealArea.module.css";
 type InitialRevealAreaProps = {
   reveal: Record<string, Card | null>;
   expectedPlayerId?: string | null;
-  onRevealCard?: (playerId: string) => void;
+  onRevealCard?: (playerId: string, element: HTMLElement) => void;
 };
 
 export default function InitialRevealArea({
@@ -30,11 +30,22 @@ export default function InitialRevealArea({
 
       {expectedPlayerId && (
         <div className={styles.initialDeckZone}>
-          <InitialDeck
-            disabled={!onRevealCard}
-            onClick={() => onRevealCard?.(expectedPlayerId)}
-            label="Lever"
-          />
+          <div
+            data-initial-deck
+            onClick={() => {
+              const element = document.querySelector("[data-initial-deck]");
+
+              if (element instanceof HTMLElement) {
+                onRevealCard?.(expectedPlayerId, element);
+              }
+            }}
+          >
+            <InitialDeck
+              disabled={!onRevealCard}
+              onClick={() => {}}
+              label="Lever"
+            />
+          </div>
 
           <div className={styles.drawIndicator}>
             <span className={styles.pointer}>👆</span>

@@ -53,41 +53,42 @@ export function resolveTrick(state: Game37State): Game37State {
       winnerTeamId,
       winningCard: winner.card,
       leadSuit,
+      playedCards: state.currentTrick.map((played) => ({ ...played })),
     },
   });
 
   state.currentTrick = [];
 
-// 🔥 CAS 1 : il reste des cartes à piocher
-if (state.drawPile.length > 0) {
-  state.phase = "draw_phase";
+  // 🔥 CAS 1 : il reste des cartes à piocher
+  if (state.drawPile.length > 0) {
+    state.phase = "draw_phase";
+    state.currentPlayerId = winner.playerId;
+    return state;
+  }
+
+  // 🔥 CAS 2 : plus de pioche → continuer à jouer
+  const allHandsEmpty = Object.values(state.hands).every(
+    (hand) => hand.length === 0
+  );
+
+  // 🔥 FIN DE MANCHE
+  if (allHandsEmpty) {
+    state.phase = "round_scoring";
+    state.currentPlayerId = null;
+
+    state.eventQueue.push({
+      type: "round_end",
+      payload: {
+        roundNumber: state.roundNumber,
+      },
+    });
+
+    return state;
+  }
+
+  // 🔥 continuer les plis sans pioche
+  state.phase = "trick_play";
   state.currentPlayerId = winner.playerId;
-  return state;
-}
-
-// 🔥 CAS 2 : plus de pioche → continuer à jouer
-const allHandsEmpty = Object.values(state.hands).every(
-  (hand) => hand.length === 0
-);
-
-// 🔥 FIN DE MANCHE
-if (allHandsEmpty) {
-  state.phase = "round_scoring";
-  state.currentPlayerId = null;
-
-  state.eventQueue.push({
-    type: "round_end",
-    payload: {
-      roundNumber: state.roundNumber,
-    },
-  });
 
   return state;
-}
-
-// 🔥 continuer les plis sans pioche
-state.phase = "trick_play";
-state.currentPlayerId = winner.playerId;
-
-return state;
 }
