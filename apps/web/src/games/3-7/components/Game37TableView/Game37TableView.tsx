@@ -1,7 +1,7 @@
 import GameTable from "../GameTable/GameTable";
 import TrickArea from "../TrickArea/TrickArea";
 import InitialRevealArea from "../InitialRevealArea/InitialRevealArea";
-import RoundControlPanel from "../RoundControlPanel/RoundControlPanel";
+import { getTeamLabel } from "../../mappers/playerLabels";
 import TrouverFlag from "../TrouverFlag/TrouverFlag";
 import DrawPile from "../DrawPile/DrawPile";
 import PlayerHand from "../PlayerHand/PlayerHand";
@@ -149,8 +149,7 @@ export default function Game37TableView({
                 onRevealCard={handleRevealInitialCard}
               />
             </div>
-          ) : (state.phase === "round_scoring" ||
-              state.phase === "round_transition" ||
+          ) : (state.phase === "round_transition" ||
               state.phase === "match_end") &&
             !roundScoringMotion.active ? (
             <RoundScoringShowcase
@@ -158,7 +157,16 @@ export default function Game37TableView({
               bottomCards={state.wonCardsByOwner["team-1"] || []}
               topScore={state.scoreByTeam["team-2"] || 0}
               bottomScore={state.scoreByTeam["team-1"] || 0}
-              onNextRound={() => dispatch({ type: "next_round" })}
+              onNextRound={
+                state.phase === "match_end"
+                  ? undefined
+                  : () => dispatch({ type: "next_round" })
+              }
+              winnerTeamLabel={
+                state.phase === "match_end" && state.winnerTeamId
+                  ? getTeamLabel(state.winnerTeamId)
+                  : undefined
+              }
               showcaseRef={centerRef}
             />
           ) : (

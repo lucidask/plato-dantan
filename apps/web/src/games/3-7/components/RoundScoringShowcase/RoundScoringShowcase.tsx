@@ -6,7 +6,8 @@ type Props = {
   bottomCards: any[];
   topScore: number;
   bottomScore: number;
-  onNextRound: () => void;
+  onNextRound?: () => void;
+  winnerTeamLabel?: string;
   showcaseRef?: React.RefObject<HTMLDivElement | null>;
 };
 
@@ -16,6 +17,7 @@ export default function RoundScoringShowcase({
   topScore,
   bottomScore,
   onNextRound,
+  winnerTeamLabel,
   showcaseRef,
 }: Props) {
   return (
@@ -29,7 +31,7 @@ export default function RoundScoringShowcase({
         gridTemplateRows: "1fr auto 1fr",
         gap: 12,
       }}
-        ref={showcaseRef}
+      ref={showcaseRef}
     >
       <div className={styles.cardsRow}>
         {topCards.map((card, index) => (
@@ -54,7 +56,11 @@ export default function RoundScoringShowcase({
         <p>Joueur 2 : {topScore} pts</p>
         <p>Joueur 1 : {bottomScore} pts</p>
 
-        <button onClick={onNextRound}>Manche suivante</button>
+        {winnerTeamLabel ? (
+          <h3>Victoire : {winnerTeamLabel}</h3>
+        ) : (
+          <button onClick={onNextRound}>Manche suivante</button>
+        )}
       </div>
 
       <div className={styles.cardsRow}>

@@ -52,8 +52,12 @@ export function dispatchGame37Action(
         ...state.currentTrick.map((played) => played.card),
       ];
 
-      const team1Cards = allCards.slice(0, Math.ceil(allCards.length / 2));
-      const team2Cards = allCards.slice(Math.ceil(allCards.length / 2));
+      const shuffled = [...allCards].sort(() => Math.random() - 0.5);
+
+      const splitIndex = Math.floor(Math.random() * shuffled.length);
+
+      const team1Cards = shuffled.slice(0, splitIndex);
+      const team2Cards = shuffled.slice(splitIndex);
 
       state.wonCardsByOwner = {
         "team-1": team1Cards,
@@ -68,9 +72,10 @@ export function dispatchGame37Action(
       state.currentTrick = [];
       state.drawContext = null;
       state.currentPlayerId = null;
-      state.phase = "round_transition";
 
-      return state;
+      state.phase = "round_scoring";
+
+      return scoreRound(state);
     }
 
     default:
