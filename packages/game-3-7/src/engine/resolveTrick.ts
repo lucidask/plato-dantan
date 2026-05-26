@@ -61,6 +61,43 @@ export function resolveTrick(state: Game37State): Game37State {
 
   // 🔥 CAS 1 : il reste des cartes à piocher
   if (state.drawPile.length > 0) {
+    const loserIds = state.players
+      .filter((player) => player.id !== winner.playerId)
+      .map((player) => player.id);
+
+    const expectedOrder = [
+      winner.playerId,
+      ...loserIds,
+    ];
+
+    if (state.drawPile.length > 0) {
+      const loserIds = state.players
+        .filter((player) => player.id !== winner.playerId)
+        .map((player) => player.id);
+
+      const expectedOrder = [
+        winner.playerId,
+        ...loserIds,
+      ];
+
+      state.drawContext = {
+        expectedOrder,
+        currentIndex: 0,
+        leadSuit,
+        winningCard: winner.card,
+        winnerPlayerId: winner.playerId,
+        winnerTeamId,
+        playersWhoFollowedSuit: state.currentTrick
+          .filter((played) => played.card.suit === leadSuit)
+          .map((played) => played.playerId),
+      };
+
+      state.phase = "draw_phase";
+      state.currentPlayerId = winner.playerId;
+
+      return state;
+    }
+
     state.phase = "draw_phase";
     state.currentPlayerId = winner.playerId;
     return state;

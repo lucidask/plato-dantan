@@ -16,6 +16,7 @@ export default function DrawPile({
     <div className={styles.wrapper}>
       <button
         type="button"
+        data-draw-pile="true"
         className={styles.drawPile}
         disabled={disabled || count <= 0}
         onClick={(event) => onDraw?.(event.currentTarget)}

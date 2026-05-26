@@ -17,6 +17,7 @@ import Game37TableView from "../components/Game37TableView/Game37TableView";
 import Game37DebugPanel from "../debug/Game37DebugPanel";
 import { useRoundScoringAnimation } from "../hooks/useRoundScoringAnimation";
 import { useAutoScoreRound } from "../hooks/useAutoScoreRound";
+import { useAutoBotTurn } from "../hooks/useAutoBotTurn";
 
 export default function Game37Screen() {
   const { state, dispatch } = useGame37LocalMatch();
@@ -180,6 +181,16 @@ export default function Game37Screen() {
     dispatch,
     enabled: true,
     delayMs: 500,
+  });
+
+  useAutoBotTurn({
+    state,
+    enabled: true,
+    delayMs: 800,
+    isDealing,
+    handlePlayCard,
+    handleDrawCard,
+    handleRevealInitialCard,
   });
 
   const visibleDrawPileCount = isDealing

@@ -21,6 +21,7 @@ export default function PlayingCard({
   return (
     <button
       type="button"
+      data-card-id={card.id}
       className={`${styles.card} ${isRed ? styles.red : styles.black} ${className ?? ""}`}
       disabled={disabled}
       onClick={(event) => {

@@ -24,10 +24,11 @@ function createInitialState(): Game37State {
       },
       {
         id: "player-2",
-        displayName: "Joueur 2",
+        displayName: "Malis",
         seat: 2,
         teamId: "team-2",
-        isBot: false,
+        isBot: true,
+        botLevel: "extreme",
       },
     ],
   });

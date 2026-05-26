@@ -15,3 +15,4 @@ export * from "./rules/checkMatchEnd";
 export * from "./engine/nextRound";
 export * from "./engine/dispatch";
 export * from "./test-utils/simulateMatch";
+export * from "./bot/chooseBotAction";
